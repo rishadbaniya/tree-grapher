@@ -45,6 +45,7 @@ export declare class NodeGroup {
     IsDestroyed(): boolean;
     Destroy(): void;
 }
+export declare const NodeGroup_destroyedStr = "[this object has been destroyed; seeing this indicates a bug]";
 export declare class NodeConnectorInfo {
     constructor(data: NodeConnectorInfo);
     group: NodeGroup;

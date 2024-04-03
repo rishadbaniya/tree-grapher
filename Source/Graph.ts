@@ -19,7 +19,7 @@ export const GraphContext = createContext<Graph>(defaultGraph);
 
 export type KeyframeInfo = {
 	//layoutHelperGraph: Graph,
-	layout: FlexNode<NodeGroup>;
+	layout: FlexNode<NodeGroup>|n;
 	percentThroughTransition: number,
 };
 //export type AnimationData = {visibleNodeGroupPaths: string[], percentThroughTransition: number};
@@ -57,6 +57,10 @@ export class Graph {
 		this.getGroupStablePath = getGroupStablePath;
 		this.animation_autorunDisposer = autorun(()=>{
 			this.nextKeyframeInfo = this.getNextKeyframeInfo!();
+			if (globalThis.DEV) {
+				const treeNodes = this.nextKeyframeInfo?.layout?.nodes ?? [];
+				Assert(treeNodes.every(a=>!a.data.IsDestroyed()), "Graph.animation_autorun encountered a destroyed node-group!");
+			}
 			if (this.nextKeyframeInfo) {
 				this.RunLayout_InAMoment();
 			}
@@ -236,7 +240,7 @@ export class Graph {
 
 		const layout = new FlexTreeLayout<NodeGroup>({
 			children: group=>{
-				const children = this.FindChildGroups(group).filter(nodeGroupFilter).filter(a=>a.leftColumnEl != null && a.lcSize != null); // ignore children that don't have their basic info loaded yet
+				const children = this.FindChildGroups(group).filter(nodeGroupFilter).filter(a=>a.leftColumnEl != null && a.lcSize != null);
 				const children_noSelfSideBoxes = children.filter(a=>!a.leftColumn_connectorOpts.parentIsAbove);
 				const children_noSelfSideBoxes_addChildSideBoxes = CE(children_noSelfSideBoxes).SelectMany(child=>{
 					const result = [child];
@@ -249,16 +253,19 @@ export class Graph {
 				});
 
 				//console.log(`For ${group.path}, found children:`, children_noSelfSideBoxes_addChildSideBoxes);
+				if (globalThis.DEV) Assert(children_noSelfSideBoxes_addChildSideBoxes.every(a=>!a.IsDestroyed()), "layout.children encountered a destroyed node-group!");
 				return children_noSelfSideBoxes_addChildSideBoxes;
 			},
 			nodeSize: node=>{
 				const data = node.data as NodeGroup;
+				if (globalThis.DEV) Assert(!data.IsDestroyed(), "layout.nodeSize encountered a destroyed node-group!");
 				Assert(data.lcSize != null, "layout.nodeSize encountered null lcSize!");
 				return direction == "topToBottom"
 					? [data.lcSize.x, data.lcSize.y]
 					: [data.lcSize.y, data.lcSize.x];
 			},
 			spacing: (nodeA, nodeB)=>{
+				if (globalThis.DEV) Assert(!nodeA.data.IsDestroyed() && !nodeB.data.IsDestroyed(), `layout.nodeSize encountered a destroyed node-group! @nodeADestroyed:${nodeA.data.IsDestroyed()} @nodeBDestroyed:${nodeB.data.IsDestroyed()}`);
 				//return nodeA.path(nodeB).length;
 				return this.layoutOpts.nodeSpacing(nodeA, nodeB) ?? 10;
 			},
@@ -272,7 +279,9 @@ export class Graph {
 	//lastAppliedLayout_nodePositions: Map<string, Vector2>|n;
 	lastAppliedLayout_nodeLayouts: NodeLayout[] = [];
 	ApplyLayout = (ownLayout: FlexNode<NodeGroup>, direction = "leftToRight" as LayoutDirection, applyAnimationModifiers = true)=>{
-		const treeNodes = ownLayout.nodes; // This is a getter, and pretty expensive (at scale)! So cache its value here.
+		const treeNodes_raw = ownLayout.nodes; // This is a getter, and pretty expensive (at scale)! So cache its value here.
+		// maybe temp; filter out any tree-nodes with destroyed node-groups (only observed for helper-tree so far); at some point, root-cause this (and probably remove this filter)
+		const treeNodes = treeNodes_raw.filter(a=>!a.data.IsDestroyed());
 		const nodeRects_base: VRect[] = treeNodes.map(node=>GetTreeNodeBaseRect(node, direction));
 		const {offset} = GetTreeNodeOffset(nodeRects_base, treeNodes, this.containerPadding);
 		const nodeLayouts = treeNodes.map((node, i)=>{
@@ -290,7 +299,9 @@ export class Graph {
 		let helperLayout_offset = new Vector2(0, 0);
 		if (applyAnimationModifiers && this.animation_autorunDisposer != null && this.nextKeyframeInfo?.layout != null) {
 			const helperLayout = this.nextKeyframeInfo.layout;
-			const helperTreeNodes = helperLayout.nodes; // This is a getter, and pretty expensive (at scale)! So cache its value here.
+			const helperTreeNodes_raw = helperLayout.nodes; // This is a getter, and pretty expensive (at scale)! So cache its value here.
+			// maybe temp; filter out any tree-nodes with destroyed node-groups (only observed for helper-tree so far); at some point, root-cause this (and probably remove this filter)
+			const helperTreeNodes = helperTreeNodes_raw.filter(a=>!a.data.IsDestroyed());
 			const helperNodeRects_base: VRect[] = helperTreeNodes.map(node=>GetTreeNodeBaseRect(node, direction));
 			const {offset} = GetTreeNodeOffset(helperNodeRects_base, helperTreeNodes, this.containerPadding);
 			helperLayout_offset = offset;

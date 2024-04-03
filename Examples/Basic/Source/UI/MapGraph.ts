@@ -24,7 +24,7 @@ export function useGraph(forLayoutHelper: boolean, layoutHelperGraph: Graph|null
 			const layout = layoutHelperGraph!.GetLayout(undefined, group=>{
 				//return mainGraph.groupsByPath.has(group.path);
 				return nodesVisibleAtKeyframe.includes(group.leftColumn_userData?.["nodePath"] as string);
-			})!;
+			});
 			return {
 				/*findHelperGroup: group=>{
 					const helperGroups = [...layoutHelperGraph!.groupsByPath.values()];

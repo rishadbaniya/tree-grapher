@@ -95,7 +95,7 @@ export class NodeGroup {
         }
     }
     IsDestroyed() {
-        return this.path == "[this object has been destroyed; seeing this indicates a bug]";
+        return this.path == NodeGroup_destroyedStr;
     }
     Destroy() {
         //console.log("Destroying node-group:", this);
@@ -103,10 +103,11 @@ export class NodeGroup {
         this.connectorLinesComp?.remove();
         this.childHolderEl?.remove();*/
         for (const [key, value] of Object.entries(NodeGroup.prototype).filter(a => a["name"] != "IsDestroyed").concat(Object.entries(this))) {
-            this[key] = "[this object has been destroyed; seeing this indicates a bug]";
+            this[key] = NodeGroup_destroyedStr;
         }
     }
 }
+export const NodeGroup_destroyedStr = "[this object has been destroyed; seeing this indicates a bug]";
 const compsWithForceUpdateScheduled = new Set();
 function RunForceUpdateForScheduledComps() {
     for (const comp of compsWithForceUpdateScheduled) {

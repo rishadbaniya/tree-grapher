@@ -10,7 +10,7 @@ import { SpaceTakerUI_Handle } from "./UI/SpaceTakerUI.js";
 import { n, RequiredBy } from "./Utils/@Internal/Types.js";
 export declare const GraphContext: import("react").Context<Graph>;
 export type KeyframeInfo = {
-    layout: FlexNode<NodeGroup>;
+    layout: FlexNode<NodeGroup> | n;
     percentThroughTransition: number;
 };
 export declare function InterpolateVector(vecA: Vector2, vecB: Vector2, percent: number): Vector2;
