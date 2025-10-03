@@ -17,4 +17,4 @@ export declare class ConnectorLinesUI_Handle {
 }
 export declare const ConnectorLinesUI: React.MemoExoticComponent<(props: {
     takeSpace?: boolean;
-}) => JSX.Element>;
+}) => React.JSX.Element>;

@@ -25,7 +25,7 @@ export function useRef_nodeLeftColumn(treePath: string, nodeConnectorOpts?: Node
 
 	const ref_resizeObserver = useRef<ResizeObserver | null>(null);
 
-	const ref_leftColumn_storage = useRef<HTMLElement>();
+	const ref_leftColumn_storage = useRef<HTMLElement>(null);
 	const ref_leftColumn = useCallback(el=>{
 		ref_leftColumn_storage.current = el;
 		if (el) {

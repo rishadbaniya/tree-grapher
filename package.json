@@ -1,7 +1,7 @@
 {
   "name": "tree-grapher",
   "description": "Library for calculating where to draw tree nodes, while avoiding overlap.",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "author": "Venryx (https://venryx.com)",
   "main": "Dist/index.js",
   "typings": "Dist/index.d.ts",
@@ -27,21 +27,19 @@
     "dist": "tsc"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/react": "^17.0.9",
+    "@types/react": "^19.0.0",
     "@types/node": "20.6.2",
     "concurrently": "^6.1.0",
-    "eslint": "^7.0.0",
-    "eslint-config-vbase": "1.0.11",
-    "react-vcomponents": "1.0.39",
-    "react-vextensions": "1.0.15",
+    "react-vcomponents": "1.0.47",
+    "react-vextensions": "1.0.23",
     "tree-grapher": "file:.",
     "ts-loader": "9.2.6",
-    "typescript": "5.2.2",
-    "ui-debug-kit": "0.0.5",
+    "typescript": "5.3.3",
+    "ui-debug-kit": "git+https://github.com/rishadbaniya/ui-debug-kit.git#2a68c9fd435fbe67c160ba473b594165ab3c85cb",
     "webpack": "5.88.2",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.15.1"
@@ -51,10 +49,10 @@
     "d3-hierarchy": "^3.1.1",
     "js-vextensions": "1.0.73",
     "mobx": "^6.3.13",
-    "mobx-react": "^7.6.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "use-callback-ref": "^1.2.5",
+    "mobx-react": "^9.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "use-callback-ref": "^1.3.3",
     "use-resize-observer": "^8.0.0",
     "use-state-with-deps": "^1.1.1"
   }

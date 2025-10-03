@@ -13,7 +13,7 @@ export function useRef_nodeLeftColumn(treePath, nodeConnectorOpts, userData = {}
     const graph = useContext(GraphContext);
     const ref_group = useRef(null);
     const ref_resizeObserver = useRef(null);
-    const ref_leftColumn_storage = useRef();
+    const ref_leftColumn_storage = useRef(null);
     const ref_leftColumn = useCallback(el => {
         ref_leftColumn_storage.current = el;
         if (el) {

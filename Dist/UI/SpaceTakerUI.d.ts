@@ -13,4 +13,4 @@ export declare class SpaceTakerUI_Handle {
 export declare const SpaceTakerUI: React.MemoExoticComponent<(props: {
     graph: Graph;
     scaling?: number;
-}) => JSX.Element | null>;
+}) => React.JSX.Element | null>;

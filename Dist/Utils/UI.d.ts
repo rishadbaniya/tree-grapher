@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import { CSSProperties } from "react";
 export type FixHTMLProps<T> = Omit<T, "title"> & {
     title?: any;

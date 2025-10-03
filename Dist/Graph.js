@@ -250,7 +250,7 @@ export class Graph {
         const nodeLayouts = treeNodes.map((node, i) => {
             return {
                 treeNode: node,
-                lcUserData: node.data.leftColumn_userData,
+                lcUserData: node.data.leftColumn_userData, // store a copy of this, since field's contents can get changed before next layout
                 rect_final: nodeRects_base[i].NewPosition(a => a.Plus(offset)),
             };
         });
